@@ -26,7 +26,7 @@ def get_commits(data):
             break
     return commits
     
-def get_authors(data):
+def get_author_totals(data):
     # dictionary with authors name and how many commits they've done
     # eg. authors = {'Thomas': 191, 'Vincent': 26}
     sep = 72*'-'
@@ -44,6 +44,25 @@ def get_authors(data):
             else:
                 # otherwise, increase the number of commits for this author by 1
                 authors[author] = authors[author] + 1
+            index = data.index(sep, index + 1)
+        except IndexError:
+            break
+    return authors
+    
+def get_authors(data):
+    # dictionary with authors name and how many commits they've done
+    # eg. authors = {'Thomas': 191, 'Vincent': 26}
+    sep = 72*'-'
+    authors = []
+    index = 0
+    while index < len(data):
+        try:
+            # parse each of the authors and put them into a dictionary with the number of commits they've done
+            # get the author name with spaces at end removed
+            author = data[index + 1].split('|')[1].strip()
+            # check if author is already in the dictionary
+            if author not in authors:
+                authors.append(author)
             index = data.index(sep, index + 1)
         except IndexError:
             break
@@ -73,11 +92,12 @@ def get_active_days(data):
         except IndexError:
             break
     return active_days
-    
+            
 def get_change_totals(data):
     # list of dictionaries with author, additions, deletions and modifications
     sep = 72*'-'
     change_totals = []
+    dict = {}
     index = 0
     while index < len(data):
         try:
@@ -86,11 +106,13 @@ def get_change_totals(data):
             additions = 0
             deletions = 0
             modifications = 0
+            print 'Current author: ', author
             
             # get the changed paths 
             # changed paths start at +3 from where the separator is 
             # and run up to where the next empty line is (empty line = '')
             changed_paths = data[index+3:data.index('',index+1)]
+            
             for change in changed_paths:
                 change_type = change.split(' ')[0]
                 #print change_type
@@ -101,44 +123,56 @@ def get_change_totals(data):
                 else:
                     modifications = modifications + 1
             
-            #print 'Author: ', author, ' additions: ', additions, ' deletions: ', deletions, 'mods: ', modifications
-            # check if author is already in the dictionary
-            if author not in change_totals:
-                # if not, add the author and set the number of change types
-                dict = {'author': author,
+            # if the list is empty, go ahead and add the dictionary
+            if len(change_totals) == 0:
+                print('Adding first dict')
+                change_dict = {'author': author,
                     'additions': additions,
                     'deletions': deletions,
                     'modifications': modifications
                 }
-                print dict
                 # add the dictionary to the list of change totals.
-                change_totals.append(dict)
-                
+                change_totals.append(change_dict)
             else:
-                # otherwise, increase the number of commits for this author by 1
-                #authors[author] = authors[author] + 1
+                # otherwise, check the list of dictionaries to see if we already have this author
+                print 'length of list:', len(change_totals)
                 for dict in change_totals:
+                    #print('Checking for author')
                     if dict['author'] == author:
-                        dict['additions'] = additions
-                        dict['deletions'] = deletions
-                        dict['modifications'] = modifications
-                print dict
-                
-            
-            # increment 
+                        #print('Found author')
+                        dict['additions'] = dict['additions'] + additions
+                        dict['deletions'] = dict['deletions'] + deletions
+                        dict['modifications'] = dict['modifications'] + modifications
+                        print dict
+                    else:
+                        # change_dict = {'author': author,
+                            # 'additions': additions,
+                            # 'deletions': deletions,
+                            # 'modifications': modifications
+                        # }
+                        # # add the dictionary to the list of change totals.
+                        # change_totals.append(change_dict)
+                        
+                        # no match found, move to next dict
+                        pass
+                       
+            # increment the index and move on
             index = data.index(sep, index + 1)
         except IndexError:
             break
     return change_totals
+
+
 
 if __name__ == '__main__':
     # open the file - and read all of the lines.
     changes_file = 'changes_python.log'
     data = read_file(changes_file)
     commits = get_commits(data)
-    authors = get_authors(data)
+    author_totals = get_author_totals(data)
     active_days = get_active_days(data)
-    change_totals = get_change_totals(data)
+    authors = get_authors(data)
+    #change_totals = get_change_totals(data)
 
     # print the number of lines read
     # print(len(data))
@@ -146,5 +180,12 @@ if __name__ == '__main__':
     # print(commits[1]['author'])
     # print(len(commits))
     print(authors)
+    print(author_totals)
     print(active_days)
-    print (len(change_totals))
+    
+    #print (len(change_totals))
+   
+    # for index, item in enumerate(change_totals):
+        # print index, item
+        
+    
