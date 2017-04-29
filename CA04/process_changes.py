@@ -31,6 +31,10 @@ class Commit(object):
         return 'svn merge -r' + str(self.revision-1) + ':' + str(self.revision) + ' by ' \
                 + self.author + ' with the comment ' + ','.join(self.comment) \
                 + ' and the changes ' + ','.join(self.changes)
+    
+    #function to return the author of each commit
+    def get_commit_author(self):
+        return self.author
 
 commits = []
 current_commit = None
@@ -66,4 +70,5 @@ print(len(commits))
 commits.reverse()      #the list of commits is backwards (oldest commits are at the top), so reverse will put it in chronological order
 
 for index, commit in enumerate(commits):
-    print(commit.get_commit_comment())
+    #print(commit.get_commit_comment())
+    print (commit.get_commit_author())
