@@ -68,6 +68,20 @@ def get_authors(data):
             break
     return authors
     
+def create_totals_list(data):
+    change_totals = []
+    change_dict = {}
+    authors = get_authors(data)
+    for author in authors:
+        change_dict = {'author': author,
+            'additions': 0,
+            'deletions': 0,
+            'modifications': 0
+        }
+        # add the dictionary to the list
+        change_totals.append(change_dict)
+    return change_totals
+    
 def get_active_days(data):
     # dictionary with days of the week and number of commits
     # eg. active_days = {'Mon': 53, 'Tue': 80}
@@ -96,9 +110,9 @@ def get_active_days(data):
 def get_change_totals(data):
     # list of dictionaries with author, additions, deletions and modifications
     sep = 72*'-'
-    change_totals = []
-    dict = {}
+    #dict = {}
     index = 0
+    change_totals = create_totals_list(data)
     while index < len(data):
         try:
             # get the author name with spaces at end removed
@@ -123,38 +137,33 @@ def get_change_totals(data):
                 else:
                     modifications = modifications + 1
             
-            # if the list is empty, go ahead and add the dictionary
-            if len(change_totals) == 0:
-                print('Adding first dict')
-                change_dict = {'author': author,
-                    'additions': additions,
-                    'deletions': deletions,
-                    'modifications': modifications
-                }
-                # add the dictionary to the list of change totals.
-                change_totals.append(change_dict)
-            else:
-                # otherwise, check the list of dictionaries to see if we already have this author
-                print 'length of list:', len(change_totals)
-                for dict in change_totals:
-                    #print('Checking for author')
-                    if dict['author'] == author:
-                        #print('Found author')
-                        dict['additions'] = dict['additions'] + additions
-                        dict['deletions'] = dict['deletions'] + deletions
-                        dict['modifications'] = dict['modifications'] + modifications
-                        print dict
-                    else:
-                        # change_dict = {'author': author,
-                            # 'additions': additions,
-                            # 'deletions': deletions,
-                            # 'modifications': modifications
-                        # }
-                        # # add the dictionary to the list of change totals.
-                        # change_totals.append(change_dict)
-                        
-                        # no match found, move to next dict
-                        pass
+            
+            
+            
+        # # if the list is empty, go ahead and add the dictionary
+        # if len(change_totals) == 0:
+            # print('Adding first dict')
+            # change_dict = {'author': author,
+                # 'additions': additions,
+                # 'deletions': deletions,
+                # 'modifications': modifications
+            # }
+            # # add the dictionary to the list of change totals.
+            # change_totals.append(change_dict)
+        # else:
+            # otherwise, check the list of dictionaries to see if we already have this author
+            #print 'length of list:', len(change_totals)
+            for dict in change_totals:
+                #print('Checking for author')
+                if dict['author'] == author:
+                    #print('Found author')
+                    dict['additions'] = dict['additions'] + additions
+                    dict['deletions'] = dict['deletions'] + deletions
+                    dict['modifications'] = dict['modifications'] + modifications
+                    #print dict
+                else:
+                    # no match found, move to next dict
+                    pass
                        
             # increment the index and move on
             index = data.index(sep, index + 1)
@@ -169,10 +178,12 @@ if __name__ == '__main__':
     changes_file = 'changes_python.log'
     data = read_file(changes_file)
     commits = get_commits(data)
+    authors = get_authors(data)
     author_totals = get_author_totals(data)
     active_days = get_active_days(data)
-    authors = get_authors(data)
-    #change_totals = get_change_totals(data)
+   
+    totals_list = create_totals_list(data)
+    change_totals = get_change_totals(data)
 
     # print the number of lines read
     # print(len(data))
@@ -182,8 +193,9 @@ if __name__ == '__main__':
     print(authors)
     print(author_totals)
     print(active_days)
+    print(totals_list)
     
-    #print (len(change_totals))
+    print change_totals
    
     # for index, item in enumerate(change_totals):
         # print index, item
