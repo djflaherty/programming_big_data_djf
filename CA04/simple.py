@@ -5,6 +5,7 @@ def read_file(changes_file):
     return data
 
 def get_commits(data):
+    #list of dictionaires with commit details
     sep = 72*'-'
     commits = []
     current_commit = None
@@ -17,7 +18,7 @@ def get_commits(data):
             commit = {'revision': details[0].strip(),
                 'author': details[1].strip(),
                 'date': details[2].strip(),
-                'number_of_lines': details[3].strip().split(' ')[1]
+                'number_of_lines': details[3].strip().split(' ')[0]
             }
             # add details to the list of commits.
             commits.append(commit)
@@ -27,20 +28,21 @@ def get_commits(data):
     return commits
     
 def get_authors(data):
-#dictionary with authors name and how many commits they've done
+    #dictionary with authors name and how many commits they've done
+    #eg. authors = {'Thomas': 191, 'Vincent': 26}
     sep = 72*'-'
     authors = {}
     index = 0
     while index < len(data):
         try:
-            # parse each of the authors and put them into a list of authors
+            # parse each of the authors and put them into a dictionary with the number of commits they've done
+            #get the author name with spaces at end removed
             author = data[index + 1].split('|')[1].strip()
+            #check if author is already in the dictionary
             if author not in authors:
+                authors[author] = 1
+            else:
                 authors[author] = authors[author] + 1
-            # the author with spaces at end removed.
-            author = {'author': details[1].strip()}
-            # add details to the list of commits.
-            authors.append(author)
             index = data.index(sep, index + 1)
         except IndexError:
             break
@@ -51,10 +53,11 @@ if __name__ == '__main__':
     changes_file = 'changes_python.log'
     data = read_file(changes_file)
     commits = get_commits(data)
+    authors = get_authors(data)
 
     # print the number of lines read
     print(len(data))
-    #print(commits)
     print(commits[0])
     print(commits[1]['author'])
     print(len(commits))
+    print(authors)
