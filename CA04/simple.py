@@ -49,6 +49,31 @@ def get_author_totals(data):
             break
     return authors
     
+def get_active_days(data):
+    # dictionary with days of the week and number of commits
+    # eg. active_days = {'Mon': 53, 'Tue': 80}
+    sep = 72*'-'
+    active_days = {}
+    index = 0
+    while index < len(data):
+        try:
+            # parse each of the weekdays and put them into a dictionary along with the number of commits on this day
+            # get the full date & time of the commit eg. '2015-11-27 16:57:44 +0000 (Fri, 27 Nov 2015)'
+            full_datetime = data[index + 1].split('|')[2]
+            # then pull out the weekday (eg. 'Mon') by first splitting on '(' and then splitting on ','
+            weekday = full_datetime.split('(')[1].split(',')[0]
+            # check if weekday is already in the dictionary
+            if weekday not in active_days:
+                # if not, add the weekday and set the number of commits to 1
+                active_days[weekday] = 1
+            else:
+                # otherwise, increase the number of commits for this weekday by 1
+                active_days[weekday] = active_days[weekday] + 1
+            index = data.index(sep, index + 1)
+        except IndexError:
+            break
+    return active_days
+
 def get_authors(data):
     # dictionary with authors name and how many commits they've done
     # eg. authors = {'Thomas': 191, 'Vincent': 26}
@@ -76,43 +101,18 @@ def create_totals_list(data):
         change_dict = {'author': author,
             'additions': 0,
             'deletions': 0,
-            'modifications': 0
+            'modifications': 0,
+            'replacements': 0
         }
         # add the dictionary to the list
         change_totals.append(change_dict)
-    return change_totals
-    
-def get_active_days(data):
-    # dictionary with days of the week and number of commits
-    # eg. active_days = {'Mon': 53, 'Tue': 80}
-    sep = 72*'-'
-    active_days = {}
-    index = 0
-    while index < len(data):
-        try:
-            # parse each of the weekdays and put them into a dictionary along with the number of commits on this day
-            # get the full date & time of the commit eg. '2015-11-27 16:57:44 +0000 (Fri, 27 Nov 2015)'
-            full_datetime = data[index + 1].split('|')[2]
-            # then pull out the weekday (eg. 'Mon') by first splitting on '(' and then splitting on ','
-            weekday = full_datetime.split('(')[1].split(',')[0]
-            # check if weekday is already in the dictionary
-            if weekday not in active_days:
-                # if not, add the weekday and set the number of commits to 1
-                active_days[weekday] = 1
-            else:
-                # otherwise, increase the number of commits for this weekday by 1
-                active_days[weekday] = active_days[weekday] + 1
-            index = data.index(sep, index + 1)
-        except IndexError:
-            break
-    return active_days
-            
+    return change_totals    
+  
 def get_change_totals(data):
     # list of dictionaries with author, additions, deletions and modifications
     sep = 72*'-'
-    #dict = {}
-    index = 0
     change_totals = create_totals_list(data)
+    index = 0
     while index < len(data):
         try:
             # get the author name with spaces at end removed
@@ -120,7 +120,8 @@ def get_change_totals(data):
             additions = 0
             deletions = 0
             modifications = 0
-            print 'Current author: ', author
+            replacements = 0
+            #print 'Current author: ', author
             
             # get the changed paths 
             # changed paths start at +3 from where the separator is 
@@ -129,38 +130,22 @@ def get_change_totals(data):
             
             for change in changed_paths:
                 change_type = change.split(' ')[0]
-                #print change_type
                 if change_type == 'A':
                     additions = additions + 1
                 elif change_type == 'D':
                     deletions = deletions + 1
-                else:
+                elif change_type == 'M':
                     modifications = modifications + 1
+                elif change_type == 'R':
+                    replacements = replacements + 1
             
-            
-            
-            
-        # # if the list is empty, go ahead and add the dictionary
-        # if len(change_totals) == 0:
-            # print('Adding first dict')
-            # change_dict = {'author': author,
-                # 'additions': additions,
-                # 'deletions': deletions,
-                # 'modifications': modifications
-            # }
-            # # add the dictionary to the list of change totals.
-            # change_totals.append(change_dict)
-        # else:
-            # otherwise, check the list of dictionaries to see if we already have this author
-            #print 'length of list:', len(change_totals)
+            # get dictionary for this author and update the totals
             for dict in change_totals:
-                #print('Checking for author')
                 if dict['author'] == author:
-                    #print('Found author')
                     dict['additions'] = dict['additions'] + additions
                     dict['deletions'] = dict['deletions'] + deletions
                     dict['modifications'] = dict['modifications'] + modifications
-                    #print dict
+                    dict['replacements'] = dict['replacements'] + replacements
                 else:
                     # no match found, move to next dict
                     pass
@@ -190,14 +175,10 @@ if __name__ == '__main__':
     # print(commits[0])
     # print(commits[1]['author'])
     # print(len(commits))
+    
     print(authors)
     print(author_totals)
     print(active_days)
-    print(totals_list)
-    
     print change_totals
-   
-    # for index, item in enumerate(change_totals):
-        # print index, item
-        
+  
     
