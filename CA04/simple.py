@@ -47,6 +47,29 @@ def get_authors(data):
         except IndexError:
             break
     return authors
+    
+def get_active_days(data):
+    #dictionary with days of the week and number of commits
+    #eg. active_days = {'Mon': 53, 'Tue': 80}
+    sep = 72*'-'
+    active_days = {}
+    index = 0
+    while index < len(data):
+        try:
+            # parse each of the weekdays and put them into a dictionary along with the number of commits on this day
+            # get the full date & time of the commit eg. '2015-11-27 16:57:44 +0000 (Fri, 27 Nov 2015)'
+            full_datetime = data[index + 1].split('|')[2]
+            # then pull out the weekday (eg. 'Mon') by first splitting on '(' and then splitting on ','
+            weekday = full_datetime.split('(')[1].split(',')[0]
+            #check if weekday is already in the dictionary
+            if weekday not in active_days:
+                active_days[weekday] = 1
+            else:
+                active_days[weekday] = active_days[weekday] + 1
+            index = data.index(sep, index + 1)
+        except IndexError:
+            break
+    return active_days
 
 if __name__ == '__main__':
     # open the file - and read all of the lines.
@@ -54,6 +77,7 @@ if __name__ == '__main__':
     data = read_file(changes_file)
     commits = get_commits(data)
     authors = get_authors(data)
+    active_days = get_active_days(data)
 
     # print the number of lines read
     print(len(data))
@@ -61,3 +85,4 @@ if __name__ == '__main__':
     print(commits[1]['author'])
     print(len(commits))
     print(authors)
+    print(active_days)
