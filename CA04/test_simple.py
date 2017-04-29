@@ -21,7 +21,7 @@ class TestCommits(unittest.TestCase):
         self.assertEqual('Thomas', commits[0]['author'])
         self.assertEqual('r1551925', commits[0]['revision'])
         
-    def test_author_total_commits(self):
+    def test_author_commit_totals(self):
         author_totals = get_author_totals(self.data)
         self.assertEqual(10, len(author_totals))
         self.assertEqual(191, author_totals['Thomas'])
@@ -35,9 +35,14 @@ class TestCommits(unittest.TestCase):
         authors = get_authors(self.data)
         self.assertEqual(10, len(authors))
         
-    def test_author_total_list_init(self):
+    def test_totals_list_create(self):
         init_total_list = create_totals_list(self.data)
         self.assertEqual(10, len(init_total_list))
+        self.assertEqual('Alan', init_total_list[9]['author'])          
+        self.assertEqual(0, init_total_list[9]['additions'])
+        self.assertEqual(0, init_total_list[9]['deletions'])
+        self.assertEqual(0, init_total_list[9]['modifications'])
+        self.assertEqual(0, init_total_list[9]['replacements'])
         
     def test_author_change_totals(self):
         change_totals = get_change_totals(self.data)

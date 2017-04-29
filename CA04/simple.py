@@ -139,7 +139,7 @@ def get_change_totals(data):
                 elif change_type == 'R':
                     replacements = replacements + 1
             
-            # get dictionary for this author and update the totals
+            # get dict for this author and update the totals
             for dict in change_totals:
                 if dict['author'] == author:
                     dict['additions'] = dict['additions'] + additions
