@@ -1,3 +1,12 @@
+"""
+B8IT105 Programming for Big Data
+Assignment 4 - Analysis on a 5000 line dataset
+
+Submitted by:
+Deirdre Flaherty (10349680)
+"""
+
+import pandas as pd
 
 def read_file(changes_file):
     # use strip to strip out spaces and trim the line.
@@ -27,7 +36,7 @@ def get_commits(data):
     return commits
     
 def get_author_totals(data):
-    # dictionary with authors name and how many commits they've done
+    # dictionary with authors name as key and the total number of commits they've done as value
     # eg. authors = {'Thomas': 191, 'Vincent': 26}
     sep = 72*'-'
     authors = {}
@@ -50,7 +59,7 @@ def get_author_totals(data):
     return authors
     
 def get_active_days(data):
-    # dictionary with days of the week and number of commits
+    # dictionary with days of the week as key and the total number of commits as value
     # eg. active_days = {'Mon': 53, 'Tue': 80}
     sep = 72*'-'
     active_days = {}
@@ -75,17 +84,16 @@ def get_active_days(data):
     return active_days
 
 def get_authors(data):
-    # dictionary with authors name and how many commits they've done
-    # eg. authors = {'Thomas': 191, 'Vincent': 26}
+    # list of unique authors
     sep = 72*'-'
     authors = []
     index = 0
     while index < len(data):
         try:
-            # parse each of the authors and put them into a dictionary with the number of commits they've done
+            # parse each of the authors and put them into a list
             # get the author name with spaces at end removed
             author = data[index + 1].split('|')[1].strip()
-            # check if author is already in the dictionary
+            # check if author is already in the list
             if author not in authors:
                 authors.append(author)
             index = data.index(sep, index + 1)
@@ -94,6 +102,8 @@ def get_authors(data):
     return authors
     
 def create_totals_list(data):
+    # list of dictionaries with author, additions, deletions, modifications and replacements
+    # initially, each dictionary in the list will have the author's name and zeros for all other key/value pairs
     change_totals = []
     change_dict = {}
     authors = get_authors(data)
@@ -106,10 +116,10 @@ def create_totals_list(data):
         }
         # add the dictionary to the list
         change_totals.append(change_dict)
-    return change_totals    
+    return change_totals        
   
 def get_change_totals(data):
-    # list of dictionaries with author, additions, deletions and modifications
+    # list of dictionaries with author, additions, deletions, modifications and replacements
     sep = 72*'-'
     change_totals = create_totals_list(data)
     index = 0
@@ -154,21 +164,56 @@ def get_change_totals(data):
             index = data.index(sep, index + 1)
         except IndexError:
             break
+    #pd.DataFrame(change_totals)
     return change_totals
 
+def get_active_hours(data):
+    # dictionary with hours as key and the total number of commits as value
+    # eg. active_hours = {'17': 53, '18': 80}
+    sep = 72*'-'
+    hours_list = []
+    active_hours = {}
+    index = 0
+    
+    # create a list of hours in the day
+    hours_list = range(1,25)
+    # create a series with zeros for each hour of the day
+    s2 = pd.Series(0,index = hours_list)
+    # convert the series to a dictionary
+    active_hours = s2.to_dict()
+    
+    while index < len(data):
+        try:
+            # parse each of the hours and put them into a dictionary along with the number of commits during this hour
+            # get the full date & time of the commit eg. '2015-11-27 16:57:44 +0000 (Fri, 27 Nov 2015)'
+            full_datetime = data[index + 1].split('|')[2]
+            # then pull out the hour (eg. '16') by first splitting on a space ' ' and then splitting on ':' & convert to int
+            commit_hour = int(full_datetime.split(' ')[2].split(':')[0])
+            #print(commit_hour)
+           
+            # increase the number of commits for this hour by 1
+            active_hours[commit_hour] = active_hours[commit_hour] + 1
+
+            index = data.index(sep, index + 1)
+        except IndexError:
+            break
+    return active_hours
 
 
 if __name__ == '__main__':
     # open the file - and read all of the lines.
     changes_file = 'changes_python.log'
     data = read_file(changes_file)
-    commits = get_commits(data)
-    authors = get_authors(data)
-    author_totals = get_author_totals(data)
-    active_days = get_active_days(data)
+    
+    # commits = get_commits(data)
+    # authors = get_authors(data)
+    # author_totals = get_author_totals(data)
+    # active_days = get_active_days(data)
    
     totals_list = create_totals_list(data)
     change_totals = get_change_totals(data)
+    
+    active_hours = get_active_hours(data)
 
     # print the number of lines read
     # print(len(data))
@@ -176,9 +221,10 @@ if __name__ == '__main__':
     # print(commits[1]['author'])
     # print(len(commits))
     
-    print(authors)
-    print(author_totals)
-    print(active_days)
-    print change_totals
+    #print(authors)
+    #print(author_totals)
+    #print(active_days)
+    #print change_totals
+    print active_hours
   
     
