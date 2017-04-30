@@ -1,7 +1,7 @@
 
 import unittest
 
-from simple import read_file, get_commits, get_authors, get_author_totals, get_active_days, create_totals_list, get_change_totals
+from simple import read_file, get_commits, get_authors, get_author_totals, get_active_days, create_totals_list, get_change_totals, get_active_hours
 
 class TestCommits(unittest.TestCase):
 
@@ -53,5 +53,10 @@ class TestCommits(unittest.TestCase):
         self.assertEqual(15, change_totals[9]['modifications'])
         self.assertEqual(0, change_totals[9]['replacements'])
 
+    def test_number_of_active_hours(self):
+        active_hours = get_active_hours(self.data)
+        self.assertEqual(24, len(active_hours))
+        self.assertEqual(4, active_hours[17])
+        
 if __name__ == '__main__':
     unittest.main()
