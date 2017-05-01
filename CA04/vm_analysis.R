@@ -63,7 +63,7 @@ commits <- mydata$NbrCommits
 png(file = 'barchart_author_commits.png')
 
 # plot the bar chart
-barplot(commits,names.arg = authors,xlab = "Author",ylab = "Number of Commits",col = "blue",
+barplot(commits,names.arg = authors,xlab = "Author",ylab = "Number of Commits",las=2, col = "blue",
         main = "Commits by Author",border = "red")
 
 # save the file
