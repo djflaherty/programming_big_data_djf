@@ -217,7 +217,6 @@ if __name__ == '__main__':
     changes_file = 'changes_python.log'
     data = read_file(changes_file)
     commits = get_commits(data)
-    author_totals = get_author_totals(data)
     
     # output active_days to a CSV file
     active_days = get_active_days(data)
@@ -229,11 +228,16 @@ if __name__ == '__main__':
     s = pd.Series(active_hours)
     output_CSV(s, 'active_hours.csv')
     
+    # output author totals to a CSV file
+    author_totals = get_author_totals(data)
+    s = pd.Series(author_totals)
+    output_CSV(s, 'author_totals.csv')
+    
     # output change_totals to a CSV file
     change_totals = get_change_totals(data)
     output_CSV(change_totals, 'change_totals.csv')
     
-    print('3 files output')
+    print('4 files output')
     
     # print the number of lines read
     # print(len(data))
