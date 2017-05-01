@@ -183,8 +183,8 @@ def get_active_hours(data):
     active_hours = {}
     index = 0
     
-    # create a list of hours in the day
-    hours_list = range(1,25)
+    # create a list of hours in the day (24-hour clock: runs from 0 to 23)
+    hours_list = range(0,24)
     # create a series with zeros for each hour of the day
     s2 = pd.Series(0,index = hours_list)
     # convert the series to a dictionary
