@@ -47,6 +47,29 @@ barplot(commits,names.arg = hours,xlab = "Hour",ylab = "Number of Commits",col =
 dev.off()
 
 ####################################################################################
+#                           Author Totals
+####################################################################################
+
+# load in the author totals CSV file and set col headings
+mydata <- read.csv('author_totals.csv', header = TRUE, col.names = c("Author","NbrCommits"))
+fix(mydata)
+
+#create vectors for the authors and the number of commits
+authors <- mydata$Author
+authors <- gsub('/OU=Domain Control Validated/CN=svn.company.net','System', authors)
+commits <- mydata$NbrCommits
+
+# give the bar chart file a name
+png(file = 'barchart_author_commits.png')
+
+# plot the bar chart
+barplot(commits,names.arg = authors,xlab = "Author",ylab = "Number of Commits",col = "blue",
+        main = "Commits by Author",border = "red")
+
+# save the file
+dev.off()
+
+####################################################################################
 #                           Change Totals per Author
 ####################################################################################
 
