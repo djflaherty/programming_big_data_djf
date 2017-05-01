@@ -50,7 +50,7 @@ def get_author_totals(data):
                 # if not, add the author and set the number of commits to 1
                 authors[author] = 1
             else:
-                # otherwise, increase the number of commits for this author by 1
+                # otherwise, increment the number of commits for this author
                 authors[author] = authors[author] + 1
             index = data.index(sep, index + 1)
         except IndexError:
@@ -117,14 +117,12 @@ def create_totals_list(data):
         change_totals.append(change_dict)
     return change_totals  
 
-def update_dict(author, changed_paths, change_totals):
-    # function to update the list of dictionaries containing the the change totals per author
-    # will get the changes contained in the list of changed_paths and calculate the number of additions, deletions etc to add
+def get_changes(changed_paths):
+    # get the number of additions, deletions, modifications & replacements in the list of changed paths
     additions = 0
     deletions = 0
     modifications = 0
     replacements = 0
-    
     for change in changed_paths:
         change_type = change.split(' ')[0]
         if change_type == 'A':
@@ -135,8 +133,14 @@ def update_dict(author, changed_paths, change_totals):
             modifications = modifications + 1
         elif change_type == 'R':
             replacements = replacements + 1
+    return additions, deletions, modifications, replacements
 
-    # get dict for this author and update the totals
+def update_dict(author, changed_paths, change_totals):
+    # function to update the list of dictionaries containing the the change totals per author
+    # will get the changes contained in the list of changed_paths and calculate the number of additions, deletions etc to add
+    # first, get the number of additions, deletions, modifications & replacements in the list of changed paths
+    additions, deletions, modifications, replacements = get_changes(changed_paths)        
+    # then get the dict for this author and update the totals
     for dict in change_totals:
         if dict['author'] == author:
             dict['additions'] = dict['additions'] + additions
