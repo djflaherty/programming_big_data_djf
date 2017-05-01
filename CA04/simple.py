@@ -173,7 +173,6 @@ def get_change_totals(data):
             index = data.index(sep, index + 1)
         except IndexError:
             break
-    #pd.DataFrame(change_totals)
     return change_totals
 
 def get_active_hours(data):
@@ -208,22 +207,34 @@ def get_active_hours(data):
             break
     return active_hours
 
+def output_CSV(s, filename):
+    # function to convert a series or list of dicts to a dataframe and output to CSV
+    df = pd.DataFrame(s)
+    df.to_csv(filename)
 
 if __name__ == '__main__':
     # open the file - and read all of the lines.
     changes_file = 'changes_python.log'
     data = read_file(changes_file)
+    commits = get_commits(data)
+    author_totals = get_author_totals(data)
     
-    # commits = get_commits(data)
-    # authors = get_authors(data)
-    # author_totals = get_author_totals(data)
-    # active_days = get_active_days(data)
-   
-    totals_list = create_totals_list(data)
-    change_totals = get_change_totals(data)
+    # output active_days to a CSV file
+    active_days = get_active_days(data)
+    s = pd.Series(active_days)
+    output_CSV(s, 'active_days.csv')
     
+    # output active_hours to a CSV file
     active_hours = get_active_hours(data)
-
+    s = pd.Series(active_hours)
+    output_CSV(s, 'active_hours.csv')
+    
+    # output change_totals to a CSV file
+    change_totals = get_change_totals(data)
+    output_CSV(change_totals, 'change_totals.csv')
+    
+    print('3 files output')
+    
     # print the number of lines read
     # print(len(data))
     # print(commits[0])
@@ -233,7 +244,8 @@ if __name__ == '__main__':
     #print(authors)
     #print(author_totals)
     #print(active_days)
-    #print change_totals
-    print active_hours
+    #print(active_hours)
+    #print(change_totals)
+    
   
     
