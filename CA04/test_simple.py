@@ -46,7 +46,7 @@ class TestCommits(unittest.TestCase):
         self.assertEqual(0, init_total_list[9]['replacements'])
     
     def test_number_of_changes(self):
-        changed_paths = self.data[3:data.index('',1)]
+        changed_paths = self.data[3:self.data.index('',1)]
         additions, deletions, modifications, replacements = get_changes(changed_paths)
         self.assertEqual(2, additions)
         self.assertEqual(2, deletions)
