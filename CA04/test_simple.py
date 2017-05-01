@@ -1,7 +1,7 @@
 
 import unittest
 
-from simple import read_file, get_commits, get_authors, get_author_totals, get_active_days, create_totals_list, get_change_totals, get_active_hours
+from simple import read_file, get_commits, get_authors, get_author_totals, get_active_days, create_totals_list, get_change_totals, get_active_hours, get_changes, update_dict
 
 class TestCommits(unittest.TestCase):
 
@@ -21,7 +21,7 @@ class TestCommits(unittest.TestCase):
         self.assertEqual('Thomas', commits[0]['author'])
         self.assertEqual('r1551925', commits[0]['revision'])
         
-    def test_author_commit_totals(self):
+    def test_author_totals(self):
         author_totals = get_author_totals(self.data)
         self.assertEqual(10, len(author_totals))
         self.assertEqual(191, author_totals['Thomas'])
@@ -34,6 +34,7 @@ class TestCommits(unittest.TestCase):
     def test_number_of_authors(self):
         authors = get_authors(self.data)
         self.assertEqual(10, len(authors))
+        self.assertEqual('Thomas', authors[0])
         
     def test_totals_list_create(self):
         init_total_list = create_totals_list(self.data)
@@ -43,6 +44,25 @@ class TestCommits(unittest.TestCase):
         self.assertEqual(0, init_total_list[9]['deletions'])
         self.assertEqual(0, init_total_list[9]['modifications'])
         self.assertEqual(0, init_total_list[9]['replacements'])
+    
+    def test_number_of_changes(self):
+        changed_paths = self.data[3:data.index('',1)]
+        additions, deletions, modifications, replacements = get_changes(changed_paths)
+        self.assertEqual(2, additions)
+        self.assertEqual(2, deletions)
+        self.assertEqual(0, modifications)
+        self.assertEqual(0, replacements)
+        
+    def test_update_dict(self):
+        change_totals = create_totals_list(self.data)
+        changed_paths = self.data[3:self.data.index('',1)]
+        author = 'Thomas'
+        update_dict(author, changed_paths, change_totals)
+        self.assertEqual('Thomas', change_totals[0]['author'])          
+        self.assertEqual(2, change_totals[0]['additions'])
+        self.assertEqual(2, change_totals[0]['deletions'])
+        self.assertEqual(0, change_totals[0]['modifications'])
+        self.assertEqual(0, change_totals[0]['replacements'])
         
     def test_author_change_totals(self):
         change_totals = get_change_totals(self.data)
