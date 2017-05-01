@@ -5,7 +5,6 @@ Assignment 4 - Analysis on a 5000 line dataset
 Submitted by:
 Deirdre Flaherty (10349680)
 """
-
 import pandas as pd
 
 def read_file(changes_file):
@@ -116,21 +115,46 @@ def create_totals_list(data):
         }
         # add the dictionary to the list
         change_totals.append(change_dict)
-    return change_totals        
+    return change_totals  
+
+def update_dict(author, changed_paths, change_totals):
+    # function to update the list of dictionaries containing the the change totals per author
+    # will get the changes contained in the list of changed_paths and calculate the number of additions, deletions etc to add
+    additions = 0
+    deletions = 0
+    modifications = 0
+    replacements = 0
+    
+    for change in changed_paths:
+        change_type = change.split(' ')[0]
+        if change_type == 'A':
+            additions = additions + 1
+        elif change_type == 'D':
+            deletions = deletions + 1
+        elif change_type == 'M':
+            modifications = modifications + 1
+        elif change_type == 'R':
+            replacements = replacements + 1
+
+    # get dict for this author and update the totals
+    for dict in change_totals:
+        if dict['author'] == author:
+            dict['additions'] = dict['additions'] + additions
+            dict['deletions'] = dict['deletions'] + deletions
+            dict['modifications'] = dict['modifications'] + modifications
+            dict['replacements'] = dict['replacements'] + replacements
+    return
   
 def get_change_totals(data):
     # list of dictionaries with author, additions, deletions, modifications and replacements
     sep = 72*'-'
+    # create the initial list of dictionaries with zeros for each author
     change_totals = create_totals_list(data)
     index = 0
     while index < len(data):
         try:
             # get the author name with spaces at end removed
             author = data[index + 1].split('|')[1].strip()
-            additions = 0
-            deletions = 0
-            modifications = 0
-            replacements = 0
             #print 'Current author: ', author
             
             # get the changed paths 
@@ -138,27 +162,8 @@ def get_change_totals(data):
             # and run up to where the next empty line is (empty line = '')
             changed_paths = data[index+3:data.index('',index+1)]
             
-            for change in changed_paths:
-                change_type = change.split(' ')[0]
-                if change_type == 'A':
-                    additions = additions + 1
-                elif change_type == 'D':
-                    deletions = deletions + 1
-                elif change_type == 'M':
-                    modifications = modifications + 1
-                elif change_type == 'R':
-                    replacements = replacements + 1
-            
-            # get dict for this author and update the totals
-            for dict in change_totals:
-                if dict['author'] == author:
-                    dict['additions'] = dict['additions'] + additions
-                    dict['deletions'] = dict['deletions'] + deletions
-                    dict['modifications'] = dict['modifications'] + modifications
-                    dict['replacements'] = dict['replacements'] + replacements
-                else:
-                    # no match found, move to next dict
-                    pass
+            # update the dictionary for this author in the list of change totals
+            update_dict(author, changed_paths, change_totals)
                        
             # increment the index and move on
             index = data.index(sep, index + 1)
