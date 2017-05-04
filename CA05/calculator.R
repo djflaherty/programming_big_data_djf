@@ -45,3 +45,13 @@ square_root <- function(num){
     num ** 0.5
   }
 }
+
+#Function9: return the sine of x radians
+my_sin <- function(num){
+  sin(num)
+}
+
+#Function10: return the cosine of x radians
+my_cos <- function(num){
+  cos(num)
+}
