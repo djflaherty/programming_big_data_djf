@@ -36,3 +36,12 @@ square <- function(num){
 cube <- function(num){ 
   num ** 3
 }
+
+#Function8: get the sqare root of a number (exponentiate by 0.5)
+square_root <- function(num){ 
+  if (num < 0) {
+    'error' 
+  } else {
+    num ** 0.5
+  }
+}
