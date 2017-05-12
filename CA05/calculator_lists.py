@@ -56,7 +56,12 @@ def generate_leapyears(start, end):
     for year in range(start, end+1):
         if ((year%400==0) or (year%4==0 and year%100!=0)):
             yield year   
-    
+
+# Function10: generate a list of squares given a list of numbers
+def generate_squares(mylist):
+    for x in mylist:
+        yield x**2
+            
 ##########################################
 #               Calls
 ##########################################
@@ -69,17 +74,17 @@ print multiply_list([2,5,4,3],[2,3,0,4])
 print multiply_list([2,5,4,3],['mary',3,0,4])
 
 print list_total([2,5,4,3,-6,999])
-print get_positive_vals([-10,-66,999,0,2])
+print list_total(range(1,101))
 
+print get_positive_vals([-10,-66,999,0,2])
 print get_squares([2,5,4,-2])
 print get_leapyears([1600,1700,1800,1900,2000, 1992])
-
-leaps = generate_leapyears(1992,2000)
-for year in leaps:
-    print year,
-print
 
 leaps = generate_leapyears(1900,2000)
 for year in leaps:
     print year,
 print
+
+squares = generate_squares(range(1,100))
+for num in squares:
+    print num,
