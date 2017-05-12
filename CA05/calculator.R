@@ -77,21 +77,32 @@ my_cube <- function(num){
 
 # Function8: get the sqare root of a number (exponentiate by 0.5)
 my_sqrt <- function(num){ 
-  if (num < 0) {
-    'error' 
-  } else {
+  if (is.numeric(num) & num > 0)
+  {
     num ** 0.5
+  } else {
+    'error'  
   }
 }
 
 # Function9: return the sine of x radians
 my_sin <- function(num){
-  sin(num)
+  if (is.numeric(num))
+  {
+    sin(num)
+  } else {
+    'error'  
+  }
 }
 
 # Function10: return the cosine of x radians
 my_cos <- function(num){
-  cos(num)
+  if (is.numeric(num))
+  {
+    cos(num)
+  } else {
+    'error'  
+  }
 }
 
 ####################################################################################
@@ -145,13 +156,16 @@ my_sqrt(9)
 my_sqrt(25)
 my_sqrt(5)
 my_sqrt(-4)
+my_sqrt('fred')
 
 # Test my_sine function
 my_sin(3)
 my_sin(-3)
 my_sin(0)
+my_sin('fred')
 
 # Test my_cos function
 my_cos(0)
 my_cos(3)
 my_cos(-3)
+my_cos('fred')
