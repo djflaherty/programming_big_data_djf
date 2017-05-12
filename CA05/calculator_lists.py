@@ -44,9 +44,18 @@ def get_squares(mylist):
     return [ x**2 for x in mylist ]
 
 # Function8: return a list of leap years using List Comprehension
+# a leap year is identified as one that either divides evenly by 400
+# OR it divides evenly by 4 but not by 100
 def get_leapyears(mylist):
     return [ x for x in mylist if ((x%400==0) or (x%4==0 and x%100!=0)) ]
-    
+
+# Function9: generator to return a list of leap years given a start & end year
+# a leap year is identified as one that either divides evenly by 400
+# OR it divides evenly by 4 but not by 100
+def generate_leapyears(start, end):
+    for year in range(start, end+1):
+        if ((year%400==0) or (year%4==0 and year%100!=0)):
+            yield year   
     
 ##########################################
 #               Calls
@@ -65,3 +74,12 @@ print get_positive_vals([-10,-66,999,0,2])
 print get_squares([2,5,4,-2])
 print get_leapyears([1600,1700,1800,1900,2000, 1992])
 
+leaps = generate_leapyears(1992,2000)
+for year in leaps:
+    print year,
+print
+
+leaps = generate_leapyears(1900,2000)
+for year in leaps:
+    print year,
+print
