@@ -4,41 +4,75 @@
 
 # Function1: add two numbers together
 add_two_numbers <- function(num1, num2){ 
-  num1 + num2 
+  if (is.numeric(num1) & is.numeric(num2))
+  {
+    num1 + num2 
+  } else {
+    'error'
+  }
 }
 
 # Function2: subtract one number from another
 subtract_two_numbers <- function(num1, num2){ 
-  num1 - num2 
+  if (is.numeric(num1) & is.numeric(num2))
+  {
+    num1 - num2 
+  } else {
+    'error'
+  }
 }
 
 # Function3: multiply two numbers
 multiply_two_numbers <- function(num1, num2){ 
-  num1 * num2 
+  if (is.numeric(num1) & is.numeric(num2))
+  {
+    num1 * num2 
+  } else {
+    'error'  
+  }
 }
 
 # Function4: divide one number by another
 divide_two_numbers <- function(num1, num2){ 
-  if (num2 == 0) {
-    'undefined' 
+  if (is.numeric(num1) & is.numeric(num2)) {
+    if (num2 == 0) {
+      'undefined' 
+    } else {
+      num1 / num2
+    }
   } else {
-    num1 / num2
+    'error'
   }
 }
 
 # Function5: exponentiate one number by another
 exponentiate_two_numbers <- function(num1, num2){ 
-  num1 ** num2 
+  if (is.numeric(num1) & is.numeric(num2))
+  {
+    num1 ** num2
+  } else {
+    'error'  
+  }
 }
 
 #Function6: square a number
 my_square <- function(num){ 
-  num ** 2
+  if (is.numeric(num))
+  {
+    num ** 2
+  } else {
+    'error'  
+  }
 }
 
 # Function7: cube a number
 my_cube <- function(num){ 
-  num ** 3
+  if (is.numeric(num))
+  {
+    num ** 3
+  } else {
+    'error'  
+  }
 }
 
 # Function8: get the sqare root of a number (exponentiate by 0.5)
@@ -67,37 +101,44 @@ my_cos <- function(num){
 # Test add_two_numbers function
 add_two_numbers(5,3)
 add_two_numbers(4,0)
+add_two_numbers('fred',0)
 
 # Test subtract_two_numbers function
 subtract_two_numbers(5,3)
 subtract_two_numbers(4,0)
 subtract_two_numbers(3,4)
+subtract_two_numbers('fred',4)
 
 # Test multiply_two_numbers function
 multiply_two_numbers(5,3)
 multiply_two_numbers(4,0)
 multiply_two_numbers(3,-4)
+multiply_two_numbers(3,'fred')
 
 # Test divide_two_numbers function
 divide_two_numbers(6,2)
 divide_two_numbers(6,0)
 divide_two_numbers(6,-2)
+divide_two_numbers(6,'fred')
 
 # Test exponentiate_two_numbers function
 exponentiate_two_numbers(5,3)
 exponentiate_two_numbers(4,1)
 exponentiate_two_numbers(4,0)
 exponentiate_two_numbers(2,-2)
+exponentiate_two_numbers(2,'fred')
 
 # Test my_square function
 my_square(3)
 my_square(5)
 my_square(-3)
+my_square('fred')
 
 # Test my_cube function
 my_cube(2)
 my_cube(5)
 my_cube(-2)
+my_cube('fred')
 
 # Test my_sqrt function
 my_sqrt(9)
