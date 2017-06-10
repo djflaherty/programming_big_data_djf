@@ -16,5 +16,5 @@ Python code to scrub over 5000 lines of text, place it into relevant container o
 <br>
 
 <b>CA5 R Calculator, Python Lambda, Map, Filter, Reduce</b><br>
-Part A: Python calculator functions from CA1 implemented as a set of 10 functions in R<br>
-Part B: Calculator functions in Python using lambda, map, filter, reduce, generator and list comprehension
+Part A: Python calculator functions from CA01 implemented as a set of 10 functions in R<br>
+Part B: More calculator functions in Python but this time using lambda, map, filter, reduce, list comprehension and generators
