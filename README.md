@@ -1,5 +1,5 @@
 # programming_big_data_djf
-Python & R code written for "Programming for Big Data" course assignments
+Python & R code for "Programming for Big Data" course assignments
 <br><br>
 
 <b>CA01: A 10 Function Calculator</b><br>
