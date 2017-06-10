@@ -1,5 +1,6 @@
 # programming_big_data_djf
-Deirdre's code for Programming for Big Data
+Python & R code written for "Programming for Big Data" course assignments
+<br>
 
 <b>CA01: A 10 Function Calculator</b><br>
 10 functions in Python code that one would expect to find on a scientific calculator.<br>
