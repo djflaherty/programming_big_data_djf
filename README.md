@@ -8,7 +8,7 @@ Python code is in calculator.py and associated testsuites are in test_calculator
 <br><br>
 
 <b>CA04: Analysis on a 5000 Line Dataset</b><br>
-Python code to scrub (clean) over 5000 lines of text, place it into relevant container objects (using lists, dictionaries and data frames) and output CSV files. Analysis of CSV files in R Studio using bar charts. Statistical analytics conclusions based on the information that was gleamed from the dataset.<br>
+Python code to scrub over 5000 lines of text, place it into relevant container objects (using lists, dictionaries and data frames) and output CSV files. Analysis of CSV files in R Studio using bar charts. Statistical analytics conclusions based on the information that was gleamed from the dataset.<br>
 <ul><li>Python code is in simple.py and associated testsuites are in test_simple.py</li>
 <li>Python code outputs 4 CSV files</li>
 <li>R script to load CSV files and plot bar charts is contained in vm_analysis.R</li>
